@@ -39,8 +39,9 @@ start()
 		list=( $S )
 		if [ ${#list[@]} -eq 4 ]
 		then
+			# SETTING - настроить путь до связываемого устройства
 			nohup sudo -u ${list[0]} remserial -d -r ${list[1]} -p ${list[2]} -l /tmp/${list[3]} /dev/ptmx > /dev/null 2>&1 &
-			echo $! >> $PIDFILE
+			echo -e "$!\t${list[0]}\t${list[3]}" >> $PIDFILE
 		fi
 	done
 	echo 'Running'
@@ -72,12 +73,19 @@ check_status()
 {
 	if [ -f $PIDFILE ]; then
 		echo 'Is Running'
+		cat $PIDFILE
 	else
 		echo 'Is Stoping'
 	fi
 }
 
-# See how we were called.
+
+if [ "$(id -u)" != "0" ]; then
+	echo "This script must be run as root"
+	exit 1
+fi
+
+# Выбираем что вызывать
 case "$1" in
 	start)
 		start
@@ -93,7 +101,6 @@ case "$1" in
 		RETVAL=$?
 		;;
 	*)
-		#msg_usage
 		echo "${0##*/} {start|stop|restart|status}"
 		RETVAL=1
 esac
