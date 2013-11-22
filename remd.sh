@@ -39,8 +39,8 @@ start()
 		list=( $S )
 		if [ ${#list[@]} -eq 4 ]
 		then
-			# SETTING - настроить путь до связываемого устройства
-			nohup sudo -u ${list[0]} remserial -d -r ${list[1]} -p ${list[2]} -l /tmp/${list[3]} /dev/ptmx > /dev/null 2>&1 &
+			# SETTING - настроить путь до связываемого устройства  /home/<user_name>/.wine/dosdevices/com1 
+			nohup sudo -u ${list[0]} remserial -d -r ${list[1]} -p ${list[2]} -l /home/${list[0]}/.wine/dosdevices/${list[3]} /dev/ptmx > /dev/null 2>&1 &
 			echo -e "$!\t${list[0]}\t${list[3]}" >> $PIDFILE
 		fi
 	done
