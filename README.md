@@ -12,3 +12,6 @@ remd.sh - демон ( /etc/init.d/ )
 * stop - останавливает
 * status - статус
 * restart - перезапускает
+
+Требования:
+* В файле /etc/sudoers хватало прав у пользователя root. ('root ALL=(ALL) ALL')

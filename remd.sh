@@ -1,11 +1,11 @@
 #!/bin/bash
 #
-# Version: 0.1
+# Version: 1.0
 #
 #pidfile: /var/run/remd.pid
 
 PIDFILE=/var/run/remd.pid
-CONFFILE=remd.conf
+CONFFILE=/etc/remd.conf
 RETVAL=0
 
 start()
