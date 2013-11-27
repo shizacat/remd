@@ -1,14 +1,42 @@
-#!/bin/bash
+#! /bin/bash
 #
-# Version: 1.0
+#chkconfig: - 98 02
+#description: Run Daemons remserial
 #
-#pidfile: /var/run/remd.pid
+### BEGIN INIT INFO
+# Provides:          remd
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Run Daemons remserial
+# Description:
+### END INIT INFO
 
-PIDFILE=/var/run/remd.pid
-CONFFILE=/etc/remd.conf
+# Author: ShizaCat <>
+
+# Do NOT "set -e"
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+#PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="Run Daemons remserial"
+NAME=remd
+DAEMON=/usr/sbin/remserial
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+CONFFILE=/etc/$NAME.conf
+
 RETVAL=0
 
-start()
+# Exit if the package is not installed
+#[ -x "$DAEMON" ] || exit 0
+
+#. /lib/lsb/init-functions
+
+#
+# Function that starts the daemon/service
+#
+do_start()
 {
 	RUNNING=0
 	
@@ -47,7 +75,10 @@ start()
 	echo 'Running'
 }
 
-stop()
+#
+# Function that stops the daemon/service
+#
+do_stop()
 {
 	if [ -f $PIDFILE ]; then
 		cat $PIDFILE | while read line
@@ -57,16 +88,16 @@ stop()
 				kill -TERM ${list[0]}
 			fi
 		done
-		rm $PIDFILE
+		rm -f $PIDFILE
 	else
 		echo 'Not running.'
 	fi
 }
 
-restart()
+do_restart()
 {
-	stop
-	start
+	do_stop
+	do_start
 }
 
 check_status()
@@ -79,30 +110,28 @@ check_status()
 	fi
 }
 
-
 if [ "$(id -u)" != "0" ]; then
-	echo "This script must be run as root"
-	exit 1
+        echo "This script must be run as root"
+        exit 1
 fi
 
-# Выбираем что вызывать
 case "$1" in
-	start)
-		start
-		;;
-	stop)
-		stop
-		;;
-	restart)
-		restart
-		;;
-	status)
-		check_status
-		RETVAL=$?
-		;;
-	*)
-		echo "${0##*/} {start|stop|restart|status}"
-		RETVAL=1
+  start)
+	do_start
+	;;
+  stop)
+	do_stop
+	;;
+  status)
+    check_status
+    ;;
+  restart)
+	do_restart
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|status|restart}" >&2
+	exit 3
+	;;
 esac
 
 exit $RETVAL
