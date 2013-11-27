@@ -28,3 +28,7 @@ chkconfig --list remd
 
 ### Требования:
 * В файле /etc/sudoers хватало прав у пользователя root. ('root ALL=(ALL) ALL')
+
+### Проверн в ОС
+* AltLinux
+
