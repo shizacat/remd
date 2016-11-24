@@ -6,6 +6,10 @@ remd
 remd.conf - Файл настроек.
 remd - демон ( /etc/init.d/ )
 
+### Зависимости
+
+* http://lpccomp.bc.ca/remserial/
+
 ### Установка:
 
 remd.conf - Положить в /etc/remd.conf / chmod 644 /etc/remd.conf
